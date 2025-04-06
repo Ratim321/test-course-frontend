@@ -13,6 +13,8 @@ import { Login } from './pages/Login';
 import { Signup } from './pages/Signup';
 import { Courses } from './pages/Courses';
 import { CourseProgress } from './pages/CourseProgress';
+import { Payment } from './pages/Payment';
+import { PaymentSuccess } from './pages/PaymentSuccess';
 
 const courses = [
   {
@@ -98,6 +100,8 @@ function App() {
             <Route path="/course/:id" element={<CourseDetails />} />
             <Route path="/course/:id/progress" element={<CourseProgress />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/course/:id/payment" element={<Payment />} />
+            <Route path="/course/:id/success" element={<PaymentSuccess />} />
           </Routes>
         </div>
       </AnimatePresence>
