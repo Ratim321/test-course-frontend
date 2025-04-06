@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { Clock, Users, Star, ChevronDown, CheckCircle, BookOpen } from 'lucide-react';
 import * as Accordion from '@radix-ui/react-accordion';
 
@@ -188,13 +188,16 @@ export const CourseDetails = () => {
             <div className="bg-white rounded-xl shadow-lg p-6 sticky top-24">
               <div className="text-center mb-6">
                 <h3 className="text-3xl font-bold text-indigo-600 mb-2">$99.99</h3>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  className="w-full py-4 bg-indigo-600 text-white rounded-lg font-semibold
-                           hover:bg-indigo-700 transition-colors mb-4"
-                >
-                  Enroll Now
-                </motion.button>
+               
+                <Link to={`/course/${id}/payment`}>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    className="w-full py-4 bg-indigo-600 text-white rounded-lg font-semibold
+                               hover:bg-indigo-700 transition-colors mb-4"
+                  >
+                    Enroll Now
+                  </motion.button>
+                </Link>
               </div>
 
               <div className="space-y-4">
