@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { stripePromise } from '../lib/payment';
 import { useAuth } from '../lib/auth';
 import { BkashPaymentForm } from '../components/BkashPaymentForm';
+import { NagadPaymentForm } from '../components/NagadPaymentForm';
 
 export const Payment = () => {
   const { id } = useParams();
@@ -13,7 +14,7 @@ export const Payment = () => {
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [paymentMethod, setPaymentMethod] = useState<'card' | 'bkash'>('card');
+  const [paymentMethod, setPaymentMethod] = useState<'card' | 'bkash' | 'nagad'>('card');
 
   // Mock course data - in a real app, this would come from an API
   const course = {
@@ -70,6 +71,16 @@ export const Payment = () => {
               >
                 bKash
               </button>
+              <button
+                onClick={() => setPaymentMethod('nagad')}
+                className={`px-4 py-2 rounded-lg ${
+                  paymentMethod === 'nagad'
+                    ? 'bg-orange-600 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                Nagad
+              </button>
             </div>
           </div>
 
@@ -84,8 +95,16 @@ export const Payment = () => {
                 setIsLoading={setIsLoading}
               />
             </Elements>
-          ) : (
+          ) : paymentMethod === 'bkash' ? (
             <BkashPaymentForm
+              amount={course.price}
+              courseId={course.id}
+              onSuccess={handlePaymentSuccess}
+              setError={setError}
+              setIsLoading={setIsLoading}
+            />
+          ) : (
+            <NagadPaymentForm
               amount={course.price}
               courseId={course.id}
               onSuccess={handlePaymentSuccess}
