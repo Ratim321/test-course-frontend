@@ -1,0 +1,95 @@
+{
+  "courses": [
+    {
+      "id": "web-development",
+      "title": "Web Development Masterclass",
+      "description": "Learn modern web development with React, Node.js, and more. Build real-world projects.",
+      "image": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fHdlYiUyMGRldmVsb3BtZW50fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=800&q=60",
+      "duration": "12 weeks",
+      "students": 1500,
+      "rating": 4.8,
+      "price": "$99.99",
+      "instructor": "John Doe",
+      "instructorImage": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+      "instructorTitle": "Senior Web Developer",
+      "modules": [
+        {
+          "id": 1,
+          "title": "Introduction to Web Development",
+          "completed": true,
+          "lessons": [
+            {
+              "id": 1,
+              "title": "Welcome to the Course",
+              "completed": true,
+              "duration": "15 min"
+            },
+            {
+              "id": 2,
+              "title": "Setting Up Your Environment",
+              "completed": true,
+              "duration": "25 min"
+            },
+            {
+              "id": 3,
+              "title": "Web Development Overview",
+              "completed": true,
+              "duration": "30 min"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "title": "HTML & CSS Fundamentals",
+          "completed": true,
+          "lessons": [
+            {
+              "id": 4,
+              "title": "HTML Basics",
+              "completed": true,
+              "duration": "45 min"
+            },
+            {
+              "id": 5,
+              "title": "CSS Styling",
+              "completed": true,
+              "duration": "50 min"
+            },
+            {
+              "id": 6,
+              "title": "Responsive Design",
+              "completed": true,
+              "duration": "40 min"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "data-science",
+      "title": "Data Science Fundamentals",
+      "description": "Master data analysis, machine learning, and visualization tools. Start your data science journey.",
+      "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTh8fGRhdGElMjBzY2llbmNlfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=800&q=60",
+      "duration": "10 weeks",
+      "students": 1200,
+      "rating": 4.7,
+      "price": "$89.99",
+      "instructor": "Dr. Emily Chen",
+      "instructorImage": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+      "instructorTitle": "Data Science Lead"
+    },
+    {
+      "id": "ui-ux-design",
+      "title": "UI/UX Design Professional",
+      "description": "Learn design principles, tools, and techniques. Create beautiful user interfaces.",
+      "image": "https://images.unsplash.com/photo-1561070791-2526d30994b5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTB8fHVpJTIwZGVzaWdufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=800&q=60",
+      "duration": "8 weeks",
+      "students": 900,
+      "rating": 4.9,
+      "price": "$79.99",
+      "instructor": "Alice Brown",
+      "instructorImage": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+      "instructorTitle": "UX Design Lead"
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "users": [
+    {
+      "id": "u1",
+      "name": "John Smith",
+      "email": "john@example.com",
+      "password": "password123",
+      "enrolledCourses": ["web-development", "data-science"],
+      "joinDate": "2024-01-15",
+      "studyTime": 15,
+      "completionRate": 92,
+      "achievements": [
+        {
+          "id": "a1",
+          "title": "Fast Learner",
+          "description": "Completed 5 lessons in one day",
+          "date": "2024-02-01"
+        },
+        {
+          "id": "a2",
+          "title": "Consistent",
+          "description": "7-day study streak",
+          "date": "2024-02-10"
+        }
+      ],
+      "progress": {
+        "web-development": {
+          "progress": 65,
+          "completedLessons": 16,
+          "totalLessons": 24,
+          "lastAccessed": "2024-03-14",
+          "nextLesson": "Advanced React Patterns",
+          "lastActivity": "Completed Module 3: React Hooks"
+        },
+        "data-science": {
+          "progress": 42,
+          "completedLessons": 13,
+          "totalLessons": 32,
+          "lastAccessed": "2024-03-13",
+          "nextLesson": "Statistical Analysis",
+          "lastActivity": "Quiz: Python Basics"
+        }
+      }
+    },
+    {
+      "id": "u2",
+      "name": "Sarah Johnson",
+      "email": "sarah@example.com",
+      "password": "password123",
+      "enrolledCourses": ["ui-ux-design"],
+      "joinDate": "2024-02-01",
+      "studyTime": 8,
+      "completionRate": 78,
+      "achievements": [
+        {
+          "id": "a3",
+          "title": "Design Pro",
+          "description": "Completed all design fundamentals",
+          "date": "2024-02-15"
+        }
+      ],
+      "progress": {
+        "ui-ux-design": {
+          "progress": 45,
+          "completedLessons": 12,
+          "totalLessons": 24,
+          "lastAccessed": "2024-03-14",
+          "nextLesson": "User Research Methods",
+          "lastActivity": "Completed Module 2: Design Principles"
+        }
+      }
+    }
+  ]
+}
