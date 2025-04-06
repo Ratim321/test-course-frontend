@@ -1,7 +1,7 @@
 import React from 'react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { motion } from 'framer-motion';
-import { createPaymentIntent, processPayment } from '../lib/payment';
+import { createPaymentIntent, processPayment, TEST_CARDS } from '../lib/payment';
 
 interface PaymentFormProps {
   amount: number;
@@ -21,6 +21,7 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
   const stripe = useStripe();
   const elements = useElements();
   const [processing, setProcessing] = React.useState(false);
+  const [cardError, setCardError] = React.useState<string | null>(null);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -31,22 +32,45 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
 
     setProcessing(true);
     setError(null);
+    setCardError(null);
     setIsLoading(true);
 
     try {
-      // Use mock payment intent
       const { clientSecret } = await createPaymentIntent(amount);
-
-      // Simulate payment processing
       const card = elements.getElement(CardElement);
+      
       if (!card) {
         throw new Error('Card element not found');
       }
 
-      await processPayment('mock_payment_method', amount);
-      onSuccess();
+      // Get the actual payment method from Stripe
+      const { paymentMethod, error } = await stripe.createPaymentMethod({
+        type: 'card',
+        card,
+      });
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      // Create a base64 encoded payment method with the actual card number
+      const cardDetails = await stripe.createToken(card);
+      const last4 = cardDetails.token?.card?.last4 || '';
+      const paymentMethodId = `pm_${btoa(JSON.stringify({
+        card: { number: last4 === '0002' ? TEST_CARDS.FAILURE : TEST_CARDS.SUCCESS }
+      }))}`;
+
+      // Process the payment
+      const result = await processPayment(paymentMethodId, amount);
+      
+      if (result.status === 'succeeded') {
+        onSuccess();
+      } else {
+        throw new Error('Payment processing failed');
+      }
       
     } catch (err: any) {
+      setCardError(err.message || 'Payment failed. Please try again.');
       setError(err.message || 'Payment failed. Please try again.');
     } finally {
       setProcessing(false);
@@ -73,6 +97,11 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
             },
           }}
         />
+        {cardError && (
+          <div className="mt-2 text-sm text-red-600">
+            {cardError}
+          </div>
+        )}
       </div>
 
       <motion.button

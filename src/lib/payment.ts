@@ -3,8 +3,14 @@ import { loadStripe } from '@stripe/stripe-js';
 // Mock payment processing delay
 const MOCK_PAYMENT_DELAY = 2000;
 
-// Mock Stripe public key - replace with your test key in a real implementation
-const stripePromise = loadStripe('pk_test_mock_key');
+// Test card numbers
+const TEST_CARDS = {
+  SUCCESS: '4242424242424242',
+  FAILURE: '4000000000000002'
+};
+
+// Use a valid test public key from Stripe
+const stripePromise = loadStripe('pk_test_51RAvMoIHl8BffgqwONjPOGr5m5x4cKXaf19oPDwA4WnDan1Cup0XO8fkHdZBf5vD9M9mp1qmH1P6LklEpYFiCOlO007aX703WX');
 
 export const createPaymentIntent = async (amount: number) => {
   // Simulate API call delay
@@ -19,22 +25,24 @@ export const createPaymentIntent = async (amount: number) => {
 };
 
 export const processPayment = async (paymentMethodId: string, amount: number) => {
-  // Simulate payment processing
   await new Promise(resolve => setTimeout(resolve, MOCK_PAYMENT_DELAY));
   
-  // Simulate successful payment 90% of the time
-  const isSuccessful = Math.random() < 0.9;
+  // Extract the card number from the payment method
+  const paymentMethod = JSON.parse(atob(paymentMethodId.split('_')[1]));
+  const cardNumber = paymentMethod?.card?.number || '';
   
-  if (!isSuccessful) {
-    throw new Error('Payment failed. Please try again.');
+  if (cardNumber === TEST_CARDS.SUCCESS) {
+    return {
+      id: `payment_${Date.now()}`,
+      amount: amount,
+      status: 'succeeded',
+      created: new Date().toISOString()
+    };
+  } else if (cardNumber === TEST_CARDS.FAILURE) {
+    throw new Error('Your card has been declined. Please try a different card.');
+  } else {
+    throw new Error('Invalid card number. Please use a test card number.');
   }
-  
-  return {
-    id: `payment_${Date.now()}`,
-    amount: amount,
-    status: 'succeeded',
-    created: new Date().toISOString()
-  };
 };
 
-export { stripePromise };
+export { stripePromise, TEST_CARDS };
