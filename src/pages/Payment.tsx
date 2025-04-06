@@ -5,6 +5,7 @@ import { PaymentForm } from '../components/PaymentForm';
 import { motion } from 'framer-motion';
 import { stripePromise } from '../lib/payment';
 import { useAuth } from '../lib/auth';
+import { BkashPaymentForm } from '../components/BkashPaymentForm';
 
 export const Payment = () => {
   const { id } = useParams();
@@ -12,6 +13,7 @@ export const Payment = () => {
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [paymentMethod, setPaymentMethod] = useState<'card' | 'bkash'>('card');
 
   // Mock course data - in a real app, this would come from an API
   const course = {
@@ -45,41 +47,52 @@ export const Payment = () => {
             Complete Your Purchase
           </h1>
 
-          {error && (
-            <div className="mb-4 p-4 bg-red-50 text-red-600 rounded-lg">
-              {error}
-            </div>
-          )}
-
-          <div className="mb-8">
-            <h2 className="text-lg font-semibold text-gray-900 mb-2">
-              Order Summary
-            </h2>
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-gray-600">Course</span>
-                <span className="font-medium">{course.title}</span>
-              </div>
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-gray-600">Instructor</span>
-                <span className="font-medium">{course.instructor}</span>
-              </div>
-              <div className="flex justify-between items-center text-lg font-semibold">
-                <span>Total</span>
-                <span>${course.price}</span>
-              </div>
+          {/* Payment Method Selection */}
+          <div className="mb-6">
+            <div className="flex space-x-4">
+              <button
+                onClick={() => setPaymentMethod('card')}
+                className={`px-4 py-2 rounded-lg ${
+                  paymentMethod === 'card'
+                    ? 'bg-indigo-600 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                Credit Card
+              </button>
+              <button
+                onClick={() => setPaymentMethod('bkash')}
+                className={`px-4 py-2 rounded-lg ${
+                  paymentMethod === 'bkash'
+                    ? 'bg-pink-600 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                bKash
+              </button>
             </div>
           </div>
 
-          <Elements stripe={stripePromise}>
-            <PaymentForm
+          {/* Payment Forms */}
+          {paymentMethod === 'card' ? (
+            <Elements stripe={stripePromise}>
+              <PaymentForm
+                amount={course.price}
+                courseId={course.id}
+                onSuccess={handlePaymentSuccess}
+                setError={setError}
+                setIsLoading={setIsLoading}
+              />
+            </Elements>
+          ) : (
+            <BkashPaymentForm
               amount={course.price}
               courseId={course.id}
               onSuccess={handlePaymentSuccess}
               setError={setError}
               setIsLoading={setIsLoading}
             />
-          </Elements>
+          )}
         </motion.div>
       </div>
     </div>

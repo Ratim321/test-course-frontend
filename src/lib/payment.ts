@@ -9,8 +9,31 @@ const TEST_CARDS = {
   FAILURE: '4000000000000002'
 };
 
+// Test bKash numbers
+const TEST_BKASH = {
+  SUCCESS: '01711111111',
+  FAILURE: '01722222222'
+};
+
 // Use a valid test public key from Stripe
 const stripePromise = loadStripe('pk_test_51RAvMoIHl8BffgqwONjPOGr5m5x4cKXaf19oPDwA4WnDan1Cup0XO8fkHdZBf5vD9M9mp1qmH1P6LklEpYFiCOlO007aX703WX');
+
+export const processBkashPayment = async (phoneNumber: string, amount: number) => {
+  await new Promise(resolve => setTimeout(resolve, MOCK_PAYMENT_DELAY));
+  
+  if (phoneNumber === TEST_BKASH.SUCCESS) {
+    return {
+      id: `bkash_${Date.now()}`,
+      amount: amount,
+      status: 'succeeded',
+      created: new Date().toISOString()
+    };
+  } else if (phoneNumber === TEST_BKASH.FAILURE) {
+    throw new Error('bKash payment failed. Please try again.');
+  } else {
+    throw new Error('Invalid bKash number. Please use a test number.');
+  }
+};
 
 export const createPaymentIntent = async (amount: number) => {
   // Simulate API call delay
@@ -45,4 +68,4 @@ export const processPayment = async (paymentMethodId: string, amount: number) =>
   }
 };
 
-export { stripePromise, TEST_CARDS };
+export { stripePromise, TEST_CARDS, TEST_BKASH };
