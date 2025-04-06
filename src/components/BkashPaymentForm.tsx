@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { processBkashPayment, TEST_BKASH } from '../lib/payment';
+import { processBkashPayment, TEST_BKASH, convertUSDtoBDT } from '../lib/payment';
 
 interface BkashPaymentFormProps {
   amount: number;
@@ -20,12 +20,15 @@ export const BkashPaymentForm: React.FC<BkashPaymentFormProps> = ({
   const [phoneNumber, setPhoneNumber] = useState('');
   const [processing, setProcessing] = useState(false);
   const [showOTP, setShowOTP] = useState(false);
+  const [paymentError, setPaymentError] = useState<string | null>(null);
+  const bdtAmount = convertUSDtoBDT(amount);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     
     setProcessing(true);
     setError(null);
+    setPaymentError(null);
     setIsLoading(true);
 
     try {
@@ -33,6 +36,7 @@ export const BkashPaymentForm: React.FC<BkashPaymentFormProps> = ({
         setShowOTP(true);
         setProcessing(false);
         setIsLoading(false);
+        setPaymentError('Payment verification required. Please enter OTP.');
         return;
       }
 
@@ -40,8 +44,11 @@ export const BkashPaymentForm: React.FC<BkashPaymentFormProps> = ({
       
       if (result.status === 'succeeded') {
         onSuccess();
+      } else {
+        setPaymentError('Payment failed. Please try again.');
       }
     } catch (err: any) {
+      setPaymentError(err.message || 'Payment failed. Please try again.');
       setError(err.message || 'Payment failed. Please try again.');
     } finally {
       setProcessing(false);
@@ -53,6 +60,13 @@ export const BkashPaymentForm: React.FC<BkashPaymentFormProps> = ({
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="bg-white p-4 rounded-lg shadow">
         <div className="space-y-4">
+          <div className="text-lg font-medium text-gray-900 mb-4">
+            Amount to Pay: {bdtAmount} BDT
+            <div className="text-sm text-gray-500">
+              (${amount} USD)
+            </div>
+          </div>
+          
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               bKash Number
@@ -89,6 +103,12 @@ export const BkashPaymentForm: React.FC<BkashPaymentFormProps> = ({
             <br />
             OTP Flow: {TEST_BKASH.FAILURE}
           </div>
+          
+          {paymentError && (
+            <div className="p-3 bg-red-50 border border-red-200 rounded-md">
+              <p className="text-sm text-red-600">{paymentError}</p>
+            </div>
+          )}
         </div>
       </div>
 
@@ -102,7 +122,7 @@ export const BkashPaymentForm: React.FC<BkashPaymentFormProps> = ({
                    ${processing ? 'opacity-75 cursor-not-allowed' : 'hover:bg-pink-700'}
                    focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500`}
       >
-        {processing ? 'Processing...' : showOTP ? 'Verify OTP' : `Pay ${amount} BDT with bKash`}
+        {processing ? 'Processing...' : showOTP ? 'Verify OTP' : `Pay ${bdtAmount} BDT with bKash`}
       </motion.button>
     </form>
   );

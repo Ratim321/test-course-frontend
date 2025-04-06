@@ -93,3 +93,12 @@ export const processPayment = async (paymentMethodId: string, amount: number) =>
 
 export { stripePromise, TEST_CARDS, TEST_BKASH };
 export { TEST_NAGAD };
+
+// USD to BDT conversion rate (1 USD = ~110 BDT)
+const USD_TO_BDT_RATE = 110;
+
+export const convertUSDtoBDT = (usdAmount: number): number => {
+  return Math.round(usdAmount * USD_TO_BDT_RATE);
+};
+
+export { USD_TO_BDT_RATE };
