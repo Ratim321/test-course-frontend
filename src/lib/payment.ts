@@ -15,6 +15,29 @@ const TEST_BKASH = {
   FAILURE: '01722222222'
 };
 
+// Test Nagad numbers
+const TEST_NAGAD = {
+  SUCCESS: '01811111111',
+  FAILURE: '01822222222'
+};
+
+export const processNagadPayment = async (phoneNumber: string, amount: number) => {
+  await new Promise(resolve => setTimeout(resolve, MOCK_PAYMENT_DELAY));
+  
+  if (phoneNumber === TEST_NAGAD.SUCCESS) {
+    return {
+      id: `nagad_${Date.now()}`,
+      amount: amount,
+      status: 'succeeded',
+      created: new Date().toISOString()
+    };
+  } else if (phoneNumber === TEST_NAGAD.FAILURE) {
+    throw new Error('Nagad payment failed. Please try again.');
+  } else {
+    throw new Error('Invalid Nagad number. Please use a test number.');
+  }
+};
+
 // Use a valid test public key from Stripe
 const stripePromise = loadStripe('pk_test_51RAvMoIHl8BffgqwONjPOGr5m5x4cKXaf19oPDwA4WnDan1Cup0XO8fkHdZBf5vD9M9mp1qmH1P6LklEpYFiCOlO007aX703WX');
 
@@ -69,3 +92,13 @@ export const processPayment = async (paymentMethodId: string, amount: number) =>
 };
 
 export { stripePromise, TEST_CARDS, TEST_BKASH };
+export { TEST_NAGAD };
+
+// USD to BDT conversion rate (1 USD = ~110 BDT)
+const USD_TO_BDT_RATE = 110;
+
+export const convertUSDtoBDT = (usdAmount: number): number => {
+  return Math.round(usdAmount * USD_TO_BDT_RATE);
+};
+
+export { USD_TO_BDT_RATE };

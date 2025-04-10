@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { processBkashPayment, TEST_BKASH, convertUSDtoBDT } from '../lib/payment';
+import { processNagadPayment, TEST_NAGAD, convertUSDtoBDT } from '../lib/payment';
 
-interface BkashPaymentFormProps {
+interface NagadPaymentFormProps {
   amount: number;
   courseId: string;
   onSuccess: () => void;
@@ -10,7 +10,7 @@ interface BkashPaymentFormProps {
   setIsLoading: (loading: boolean) => void;
 }
 
-export const BkashPaymentForm: React.FC<BkashPaymentFormProps> = ({
+export const NagadPaymentForm: React.FC<NagadPaymentFormProps> = ({
   amount,
   courseId,
   onSuccess,
@@ -21,7 +21,6 @@ export const BkashPaymentForm: React.FC<BkashPaymentFormProps> = ({
   const [processing, setProcessing] = useState(false);
   const [showOTP, setShowOTP] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
-  const bdtAmount = convertUSDtoBDT(amount);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -32,7 +31,7 @@ export const BkashPaymentForm: React.FC<BkashPaymentFormProps> = ({
     setIsLoading(true);
 
     try {
-      if (phoneNumber === TEST_BKASH.FAILURE) {
+      if (phoneNumber === TEST_NAGAD.FAILURE) {
         setShowOTP(true);
         setProcessing(false);
         setIsLoading(false);
@@ -40,7 +39,7 @@ export const BkashPaymentForm: React.FC<BkashPaymentFormProps> = ({
         return;
       }
 
-      const result = await processBkashPayment(phoneNumber, amount);
+      const result = await processNagadPayment(phoneNumber, amount);
       
       if (result.status === 'succeeded') {
         onSuccess();
@@ -56,6 +55,8 @@ export const BkashPaymentForm: React.FC<BkashPaymentFormProps> = ({
     }
   };
 
+  const bdtAmount = convertUSDtoBDT(amount);
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="bg-white p-4 rounded-lg shadow">
@@ -69,14 +70,14 @@ export const BkashPaymentForm: React.FC<BkashPaymentFormProps> = ({
           
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              bKash Number
+              Nagad Number
             </label>
             <input
               type="tel"
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
-              placeholder="Enter bKash number"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-pink-500 focus:border-pink-500"
+              placeholder="Enter Nagad number"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-orange-500 focus:border-orange-500"
             />
           </div>
           
@@ -88,7 +89,7 @@ export const BkashPaymentForm: React.FC<BkashPaymentFormProps> = ({
               <input
                 type="text"
                 placeholder="Enter OTP sent to your phone"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-pink-500 focus:border-pink-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-orange-500 focus:border-orange-500"
               />
               <p className="mt-2 text-sm text-gray-500">
                 This is a test implementation. No actual OTP will be sent.
@@ -99,9 +100,9 @@ export const BkashPaymentForm: React.FC<BkashPaymentFormProps> = ({
           <div className="text-sm text-gray-500">
             Test Numbers:
             <br />
-            Success: {TEST_BKASH.SUCCESS}
+            Success: {TEST_NAGAD.SUCCESS}
             <br />
-            OTP Flow: {TEST_BKASH.FAILURE}
+            OTP Flow: {TEST_NAGAD.FAILURE}
           </div>
           
           {paymentError && (
@@ -118,11 +119,11 @@ export const BkashPaymentForm: React.FC<BkashPaymentFormProps> = ({
         type="submit"
         disabled={processing}
         className={`w-full flex justify-center py-3 px-4 border border-transparent rounded-md
-                   shadow-sm text-sm font-medium text-white bg-pink-600 
-                   ${processing ? 'opacity-75 cursor-not-allowed' : 'hover:bg-pink-700'}
-                   focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500`}
+                   shadow-sm text-sm font-medium text-white bg-orange-600 
+                   ${processing ? 'opacity-75 cursor-not-allowed' : 'hover:bg-orange-700'}
+                   focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500`}
       >
-        {processing ? 'Processing...' : showOTP ? 'Verify OTP' : `Pay ${bdtAmount} BDT with bKash`}
+        {processing ? 'Processing...' : showOTP ? 'Verify OTP' : `Pay ${bdtAmount} BDT with Nagad`}
       </motion.button>
     </form>
   );
